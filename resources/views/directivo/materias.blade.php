@@ -46,7 +46,7 @@
                             <th>Nombre</th>
                             <th>Unidades</th>
                             <th>Cuatrimestre</th>
-                            <th>Asignar</th>
+                            <th>Acciones</th>
                         </tr>
                    </thead>
                 </table>
@@ -81,9 +81,9 @@
             <input type="number" class="form-control" id="unidades" required oninput="this.value|=0" pattern="[0-9]{2}" maxlength="2" minlength="1"/>
             <div id="feedback-unidades"></div>
 
-            <label for="cuat">Cuatrimestre: </label><br>
-            <select id="cuat" class="selectpicker" data-live-search="true" required>
-                <option disabled selected value="">Seleccione un cuatrimestre...</option>
+            <label id="lvlcuat" for="cuat">Cuatrimestre: </label><br>
+            <select id="cuat" name="cuat" class="form-control selectpicker ProductNumber error" data-live-search="true" required="true">
+                <option disabled selected value="0">Seleccione un cuatrimestre...</option>
                 <option value="1">1.ª Cuatrimestre</option>
                 <option value="2">2.ª Cuatrimestre</option>
                 <option value="3">3.ª Cuatrimestre</option>
@@ -95,6 +95,8 @@
                 <option value="9">9.ª Cuatrimestre</option>
                 <option value="10">10.ª Cuatrimestre</option>
             </select>
+            <div id="mensaje">Favor de seleccionar una opción</div>
+            
             <div class="modal-footer">
                 <button type="button" onclick="limpiar();" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 <button type="button" id="btn2" onclick="nuevoM()";  class="btn btn-primary">Guardar información</button>
@@ -105,30 +107,32 @@
   </div>
 </div>
 
-<!-- Modal Nuevo-->
-<div class="modal fade" id="editarMateriaM" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- Modal Nuevo Materia-->
+<div class="modal fade" id="editarMateria2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Editar materia</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Editar Materia</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <form method="POST">
+        <form method="POST" id="editarMateria" novalidate>
 
-            <label for="nombre">Nombre Materia</label>
-            <input type="text" class="form-control" id="nombreM2">
-            <small>Se necesita el nombre</small>
+            <input type="text" class="form-control" id="idM" aria-describedby="inputGroupPrepend">
 
-            <label for="apellidos">Cantidad Unidades</label>
-            <input type="number" class="form-control" id="unidades2" data-validate>
-            <small></small>
+            <label id="lblnombreME" for="nombreME">Nombre Materia</label><br>
+            <input type="text" class="form-control" id="nombreME" aria-describedby="inputGroupPrepend" required>
+            <div id="feedback-nombreME"></div>
 
-            <label for="cuat2">Cuatrimestre: </label><br>
-            <select id="cuat2" class="form-select" data-live-search="true" required>
-                <option selected disabled value="">Seleccione un cuatrimestre...</option>
+            <label id="lblunidadesE" for="unidadesE">Cantidad Unidades</label>
+            <input type="number" class="form-control" id="unidadesE" required oninput="this.value|=0" pattern="[0-9]{2}" maxlength="2" minlength="1"/>
+            <div id="feedback-unidadesE"></div>
+
+            <label id="lvlcuatE" for="cuatE">Cuatrimestre: </label><br>
+            <select id="cuatE" name="cuatE" class="form-control selectpicker ProductNumber error" data-live-search="true" required="true">
+                <option disabled selected value="0">Seleccione un cuatrimestre...</option>
                 <option value="1">1.ª Cuatrimestre</option>
                 <option value="2">2.ª Cuatrimestre</option>
                 <option value="3">3.ª Cuatrimestre</option>
@@ -140,14 +144,13 @@
                 <option value="9">9.ª Cuatrimestre</option>
                 <option value="10">10.ª Cuatrimestre</option>
             </select>
-            <div id="validationServer04Feedback" class="invalid-feedback">
-                Favor de seleccionar un cuatrimestre válido
+            <div id="mensajeE">Favor de seleccionar una opción</div>
+            
+            <div class="modal-footer">
+                <button type="button" onclick="limpiarE();" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" id="btn2" onclick="editarM()";  class="btn btn-primary">Guardar cambios</button>
             </div>
         </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" onclick="limpiar();" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        <button type="button" id="btn2" onclick="nuevoM();" class="btn btn-primary">Guardar información</button>
       </div>
     </div>
   </div>

@@ -34,6 +34,9 @@ Route::post('/nuevoP', [App\Http\Controllers\DirectivoController:: class, 'agreg
 Route::get('/directivo/profesores/e', [App\Http\Controllers\DirectivoController:: class, 'getProfesores'])->name('directivo.getProfesores');
 Route::get('/directivo/materias/e', [App\Http\Controllers\DirectivoController:: class, 'getMaterias'])->name('directivo.getMaterias');
 Route::post('/nuevoM', [App\Http\Controllers\DirectivoController:: class, 'agregarMateria']);
+Route::get('/infoMat/{id}', [App\Http\Controllers\DirectivoController:: class, 'infoMat'])->name('infoMat');
+Route::post('/editarM', [App\Http\Controllers\DirectivoController:: class, 'editarMateria']);
+Route::post('/eliminarM', [App\Http\Controllers\DirectivoController:: class, 'eliminarMat']);
 
 //Rutas de Alumno
 Route::get('/alumno', [App\Http\Controllers\AlumnoController::class, 'indexA'])->name('alumno');

@@ -1,5 +1,7 @@
 
     $(document).ready(function(){
+        $("#mensaje").hide();
+        $("#mensajeE").hide();
         listarM();
     })
 
@@ -31,7 +33,8 @@
             { 
                 data: 'id',
                 render:function(data,type,row){
-                    return ' <center><a class="fa fa-tasks fa-1x" style="color:green;" onClick="abrirModalM('+data+');" data-toggle="tooltip" data-placement="left" title="Asignar Materia"></a>'
+                    return ' <center><a class="fa fa-cogs fa-1x" style="color:green;" onClick="editarMateria('+data+');" data-toggle="tooltip" data-placement="left" title="Editar Materia"></a> ' +
+                    '<a class="fa fa-trash fa-1x" style="color:red;" onClick="abrirModalEl('+data+');" data-toggle="tooltip" data-placement="left" title="Eliminar Materia"></a><center>'
                 },
                 targets: -1 
             },
@@ -65,45 +68,22 @@
       });
     }
 
-    /* 
+/* 
 Función para abrir el modal de nuevo Materia
 */
 function modalNuevoM() {
     $("#modalNuevoM").modal('show');
 }
 
-// // Example starter JavaScript for disabling form submissions if there are invalid fields
-// (function () {
-//   'use strict'
-
-//   // Fetch all the forms we want to apply custom Bootstrap validation styles to
-//   var forms = document.querySelectorAll('.needs-validation')
-
-//   // Loop over them and prevent submission
-//   Array.prototype.slice.call(forms)
-//     .forEach(function (form) {
-//       form.addEventListener('submit', function (event) {
-//         if (!form.checkValidity()) {
-//           event.preventDefault()
-//           event.stopPropagation()
-//         }
-
-//         form.classList.add('was-validated')
-//       }, false)
-//     })
-// })()
-/*
-Función para agregar una nueva cuenta de Profesor
-*/
 function nuevoM(){
 
     var bandera = validar();
 
     if (bandera) {
-        var nombreM = $('#nombreM').val();
+    var nombreM = $('#nombreM').val();
     var unidades = $('#unidades').val();
     var cuat = $('#cuat').val();
-    if(nombreM == "" || unidades == "" || cuat == "" ){
+    if(nombreM == "" || unidades == "" || cuat <= 0 ){
         alertify.notify('Los datos no pueden estar vacíos', 'primary', 2, function(){console.log('dismissed');});
         //alertify.error("Los datos no pueden estar vacíos");
     }else{
@@ -134,15 +114,18 @@ function nuevoM(){
 
                 }).then(function() {
                     listarM();
+                    limpiar();
                 })
             }else if(data == 'Ya existe la Materia'){
                 $('#modalNuevoM').modal('hide');
                 swal("Incorrecto!", data, "error");
+                limpiar();
             }
         },
         error: function (request, status, error) {
             $('#modalNuevoM').modal('hide');
             alert(request.responseText);
+            limpiar();
         },
         });
     }
@@ -156,6 +139,7 @@ function validar() {
     var bandera = true;
     var nombre = document.getElementById("nombreM");
     var unidades = document.getElementById("unidades");
+    var cuat = document.getElementById("cuat");
 
     if (nombre.value.trim() == "") {
         addError(nombre, "Campo requerido");
@@ -180,7 +164,218 @@ function validar() {
         }
     }
 
+    if(cuat.selectedOptions[0].value == 0 ){
+        $("#mensaje").show();
+        document.getElementById("mensaje").style.color = "red";
+
+        document.getElementById("lvlcuat").style.color = "red";
+
+        bandera = false;
+    }else{
+        $("#mensaje").hide();
+        document.getElementById("lvlcuat").style.color = "black";
+    }
+
     return bandera;
+}
+
+function limpiar(){
+    var form = document.getElementById("nuevaMateria");
+    limpiarErrores(form);
+    $("#nombreM").val("");
+    $("#unidades").val("");
+    $('.selectpicker').selectpicker('val', '0');
+    $("#mensaje").hide();
+    document.getElementById("lvlcuat").style.color = "black";
+}
+
+function editarMateria(id){
+    $('#editarMateria2').modal('show');
+    // Método Ajax
+    jQuery.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          },
+        url: '/infoMat/' + id,
+        method: 'get',
+        data:{},
+        success: function(data){ 
+            //console.log(data)
+            $('#nombreME').val(data[0]['nombre']);
+            $('#unidadesE').val(data[0]['unidades']);  
+            $('#idM').val(id);
+            $('#cuatE').selectpicker('val', data[0]['cuatrimestre']);
+        }
+    });
+}
+
+function limpiarE(){
+    var form = document.getElementById("editarMateria");
+    limpiarErrores(form);
+    $("#nombreME").val("");
+    $("#unidadesE").val("");
+    $('#cuatE').selectpicker('val', '0');
+    $("#mensajeE").hide();
+    document.getElementById("lvlcuatE").style.color = "black";
+}
+
+function editarM(){
+
+    var bandera = validarE();
+
+    if (bandera) {
+        var nombre = $("#nombreME").val();
+        var unidades = $("#unidadesE").val();
+        var cuatr = $("#cuatE").val();
+        var id = $("#idM").val();
+    if(nombre == "" || unidades == "" || cuatr <= 0 ){
+        alertify.notify('Los datos no pueden estar vacíos', 'primary', 2, function(){console.log('dismissed');});
+    }else{
+        $.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          },
+        url: '/editarM/',
+        method: 'post',
+        data:{
+            nombre: nombre,
+            unidades: unidades,
+            cuatr: cuatr,
+            id: id,
+        },
+        success: function(data){ 
+            if(data == 'La materia ha sido actualizada'){
+                $('#editarMateria2').modal('hide');
+                swal({
+                    title: "Correcto",
+                    text: data,
+                    icon: "success",
+                    showCancelButton: true,
+                    confirmButtonColor: '#f7505a',
+                    cancelButtonColor: '#f7505a',
+                    buttons: {
+                        confirm: true,
+                    }
+
+                }).then(function() {
+                    listarM();
+                    limpiarE();
+                })
+            }else if(data == 'No existe la materia'){
+                $('#editarMateria2').modal('hide');
+                swal("Incorrecto!", data, "error");
+                limpiarE();
+            }
+        },
+        error: function (request, status, error) {
+            $('#editarMateria2').modal('hide');
+            alert(request.responseText);
+            limpiarE();
+        },
+        });
+    }
+    }
+
+}
+
+function validarE() {
+    var form = document.getElementById("editarMateria");
+    console.log(form);
+    limpiarErrores(form);
+
+    var bandera = true;
+    var nombreM = document.getElementById("nombreME");
+    var unidadesM = document.getElementById("unidadesE");
+    var cuatM = document.getElementById("cuatE");
+
+    if (nombreM.value.trim() == "") {
+        addError(nombreM, "Campo requerido");
+        bandera = false;
+    } else {
+        if (nombreM.value.trim().length < 3) {
+            addError(nombreM, "El minimo");
+            bandera = false;
+        }
+    }
+
+    if (unidadesM.value.trim() == "") {
+        addError(unidadesM, "Campo requerido");
+        bandera = false;
+    }else{
+        if(unidadesM.value.trim() >= 10){
+            addError(unidadesM, "El máximo de unidades es de 9");
+            bandera = false;
+        }else if(unidadesM.value.trim() <= 0){
+            addError(unidadesM, "El mínimo de unidades es de 1");
+            bandera = false;
+        }
+    }
+
+    if(cuatM.selectedOptions[0].value == 0 ){
+        $("#mensajeE").show();
+        document.getElementById("mensajeE").style.color = "red";
+
+        document.getElementById("lvlcuatE").style.color = "red";
+
+        bandera = false;
+    }else{
+        $("#mensajeE").hide();
+        document.getElementById("lvlcuatE").style.color = "black";
+    }
+
+    return bandera;
+}
+
+/*
+Confirmar para eliminar un profesor
+*/
+function abrirModalEl(id){
+    swal({
+        title: "¿Seguro que desea eliminar la materia?",
+        icon: "warning",
+        buttons: ["Cancelar","Confirmar"],
+        }).then(function() {
+            eliminarM(id);
+        });
+}
+
+/*
+Función para eliminar una materia
+*/
+function eliminarM(id){
+    jQuery.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          },
+        url: '/eliminarM/',
+        method: 'post',
+        data:{
+            id: id,
+        },
+        success: function(data){ 
+            console.log(data);
+            if(data == 'La materia ha sido eliminada'){
+                swal({
+                    title: "Correcto",
+                    text: data,
+                    icon: "success",
+                    showCancelButton: true,
+                    confirmButtonColor: '#f7505a',
+                    cancelButtonColor: '#f7505a',
+                    buttons: {
+                        confirm: true,
+                    }
+                }).then(function() {
+                    listarM();
+                })
+            }else if(data == 'No existe la materia'){
+                swal("Incorrecto!", data, "error");
+            }
+        },
+        error: function (request, status, error) {
+            alert(request.responseText);
+        },
+    });
 }
 
 

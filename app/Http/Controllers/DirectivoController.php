@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Profesor;
 use App\Models\Materia;
+use App\Models\Unidad;
 use App\Models\Grupo;
 use Illuminate\Support\Facades\Hash;
 
@@ -310,11 +311,20 @@ class DirectivoController extends Controller
                 
                 if($existe <= 0){
                     $materia = new Materia;
+                    
+                    $nomUnidad = "";
     
                     $materia->nombre = $nombreM;
                     $materia->unidades = $unidades;
                     $materia->cuatrimestre = $cuat;
                     $materia->save();
+
+                    for($i = 1; $i <= $unidades; $i++){
+                        $unidad = new Unidad;
+                        $unidad->numUnidad = "Unidad ".$i;
+                        $unidad->idMateria = $materia->id;
+                        $unidad->save();
+                    }
     
                     $respuesta = "Se ha agragado la nueva materia"; 
                 }else{
@@ -326,6 +336,71 @@ class DirectivoController extends Controller
             }
             return response()->json($respuesta);
     
+        }
+
+        public function infoMat($id){
+            $mat = Materia::where('id', $id)->get();
+    
+            return response()->json($mat);
+        }
+
+        public function editarMateria(Request $request){
+            if($request->isMethod('post')){
+                $nombre = $request->input("nombre");
+                $unidades = $request->input("unidades");
+                $cuatr = $request->input("cuatr");
+                $id = $request->input("id");
+    
+                $existe = Materia::where('id','=',$id)->count();
+                
+                if($existe > 0){
+                    $editarMateria = Materia::find($id);
+                    $editarMateria->nombre = $nombre;
+                    $editarMateria->unidades = $unidades;
+                    $editarMateria->cuatrimestre = $cuatr;
+                    $editarMateria->save();
+                    
+                    Unidad::where('idMateria', '=', $id)->delete();
+
+                    for($i = 1; $i <= $unidades; $i++){
+                        $unidad = new Unidad;
+                        $unidad->numUnidad = "Unidad ".$i;
+                        $unidad->idMateria = $id;
+                        $unidad->save();
+                    }
+    
+                    $respuesta = "La materia ha sido actualizada"; 
+                }else{
+                    $respuesta = "No existe la materia";
+                }
+    
+            }else{
+                $respuesta = "No se pudieron guardar los cambios";
+            }
+    
+            return response()->json($respuesta);
+        }
+
+        public function eliminarMat(Request $request){
+            if($request->isMethod('post')){
+                $id = $request->input("id");
+    
+                $existe = Materia::where('id','=',$id)->count();
+                
+                if($existe > 0){
+                    Unidad::where('idMateria','=',$id)->delete();
+                    Materia::where('id', '=', $id)->delete();
+
+                    $respuesta = "La materia ha sido eliminada"; 
+                }else{
+                    $respuesta = "No existe la materia";
+                }
+    
+            }else{
+                $respuesta = "No se pudo eliminar el profesor";
+            }
+    
+            return response()->json($respuesta);
         }
     
 }
