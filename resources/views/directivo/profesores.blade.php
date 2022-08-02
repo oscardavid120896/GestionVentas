@@ -36,7 +36,6 @@
             <div class="card-header">
                 <button id="uno" type="button" onclick="myFunction();" class="btn btn-primary">Profesores</button>
                 <button id="dos" type="button" onclick="myFunction2();" class="btn btn-light">Asignar Materia</button>
-                <button id="tres" type="button" onclick="myFunction3();" class="btn btn-light">Asignar Grupo</button>
             </div>
         </div>
     </div>
@@ -86,16 +85,17 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Listado de Materias</h3>
+                    <button id="uno" type="button" onclick="modalAsignar();" style="float: right" class="btn btn-primary btn-sm">Agregar asignación</button>
                 </div>
             <!-- /.card-header -->
             <div class="card-body" id="tab">
-                <table id="materias" class="table table-bordered table-striped shadow-lg mt-4">
+                <table id="asignada" class="table table-bordered table-striped shadow-lg mt-4">
                     <thead class="bg-primary text-white">
                         <tr>
-                            <th>Nombre</th>
-                            <th>Unidades</th>
-                            <th>Cuatrimestre</th>
-                            <th>Asignar</th>
+                            <th>Grupo</th>
+                            <th>Profesor</th>
+                            <th>Materia</th>
+                            <th>Eliminar</th>
                         </tr>
                    </thead>
                 </table>
@@ -109,9 +109,6 @@
     <!-- /.row -->
 </div>
 
-<div id="myDIV3">
-    <h1>Este es el otro div que es el 3</h1>
-</div>
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -227,7 +224,7 @@
 </div>
 
 <!-- Asignar Modal-->
-<div class="modal fade bd-example-modal-lg" id="asignarMateria" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="asignar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -238,35 +235,41 @@
       </div>
       <div class="modal-body">
         <form method="POST">
-            
-        <label for="grupo">Grupo: </label><br>
+          <div style="display:flex;">
 
-        <select id="grupo" class="selectpicker" data-live-search="true">
-            <option value="" disabled selected>Selecciona un grupo</option>
-            @foreach($grupos as $g)
-            <option value="{{$g->id}}">{{$g->nombreGrupo}}</option>
-            @endforeach
-        </select>
+            <div id="divGrupo">
+              <label for="grupo">Grupo: </label><br>
+                <select id="grupo" class="selectpicker" data-live-search="true">
+                  <option value="0" disabled selected>Selecciona un grupo</option>
+                  @foreach($grupos as $g)
+                  <option value="{{$g->id}}">{{$g->nombreGrupo}}</option>
+                  @endforeach
+                </select>
+            </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-        <br>
-        <br>
-        <div id="tabla">
-                <table id="grupos" class="table table-bordered table-striped shadow-lg mt-4">
-                    <thead class="bg-primary text-white">
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Apellidos</th>
-                            <th>Asignar</th>
-                        </tr>
-                   </thead>
-                </table>
-        </div>
+            <div id="divProf">
+              <label for="prof">Profesor: </label><br>
+                <select id="prof" class="selectpicker" data-live-search="true" >
+                  <option value="0" disabled selected>Selecciona un profesor</option>
+                  @foreach($profesores as $pro)
+                  <option value="{{$pro->idUsuario}}">{{$pro->name}}</option>
+                  @endforeach
+                </select>
+            </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
+            <div id="divMater">
+              <label for="mater">Materia: </label><br>
+                <select id="mater" class="form-control" title="Selecciona una Materia" disabled>
+                  <option value="0" disabled selected>Selecciona una Materia</option>
+                </select>
+            </div>
+
+          </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" onclick="limpiar();" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        <button type="button" id="btn2" onclick="nuevoP();" class="btn btn-primary">Guardar información</button>
+        <button type="button" onclick="limpiarSe();" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" id="btn2" onclick="asignacion();" class="btn btn-primary">Asignar</button>
       </div>
     </div>
   </div>
@@ -286,5 +289,5 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
-<script src="../js/js_directivoProfesor/directivoProfesor.js"></script>
+<script src="../js/js_directivo/directivoProfesor.js"></script>
 @stop

@@ -33,10 +33,10 @@
             { 
                 data: 'id',
                 render:function(data,type,row){
-                    return ' <center><a class="fa fa-cogs fa-1x" style="color:green;" onClick="editarMateria('+data+');" data-toggle="tooltip" data-placement="left" title="Editar Materia"></a> ' +
-                    '<a class="fa fa-trash fa-1x" style="color:red;" onClick="abrirModalEl('+data+');" data-toggle="tooltip" data-placement="left" title="Eliminar Materia"></a><center>'
+                    return '<a class="fa fa-cogs fa-1x" style="color:green;" onClick="editarMateria('+data+');" data-toggle="tooltip" data-placement="left" title="Editar Materia"></a>&nbsp;&nbsp;&nbsp; ' +
+                    '<a class="fa fa-trash-alt fa-1x" style="color:red;" onClick="abrirModalEl('+data+');" data-toggle="tooltip" data-placement="left" title="Eliminar Materia"></a>'
                 },
-                targets: -1 
+                targets: -1,className: "text-center"
             },
 
          ],
@@ -46,7 +46,7 @@
          ],
          "language":{
             "search": "Buscar",
-            "lengthMenu": "Mostrar _MENU_ usuarios por página",
+            "lengthMenu": "Mostrar _MENU_ materias por página",
             "info": "Mostrando página _PAGE_ de _PAGES_",
             "zeroRecords": "No se encontraron resultados",
             "emptyTable": "Ningún dato disponible en esta tabla",
@@ -333,10 +333,14 @@ function abrirModalEl(id){
     swal({
         title: "¿Seguro que desea eliminar la materia?",
         icon: "warning",
-        buttons: ["Cancelar","Confirmar"],
-        }).then(function() {
+        buttons: true,
+    }).then((willDelete) => {
+        if(willDelete){
             eliminarM(id);
-        });
+        }else{
+            swal.close();
+        }
+    });
 }
 
 /*

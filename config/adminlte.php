@@ -258,20 +258,23 @@ return [
             'text' => 'Profesores',
             'url'  => 'directivo/profesores',
             'icon' => 'fas fa-chalkboard-teacher',
+            'can' => 'profesor'
         ],
         [
             'text' => 'Alumnos',
-            'url'  => 'admin/settings',
+            'url'  => 'directivo/alumnos',
             'icon' => 'fas fa-user-graduate',
+            'can' => 'alumno'
         ],
         [
             'text'    => 'Gestión ',
             'icon'    => 'fas fa-archive',
+            'can' => 'gestion',
             'submenu' => [
 
                 [
                     'text'    => 'Grupos',
-                    'url'     => '#',
+                    'url'     => 'directivo/grupos',
                     'icon' => 'fas fa-users'
                 ],
                 [

@@ -3,70 +3,205 @@ Leer el documento
 */
 $(document).ready(function() {
     $("#myDIV2").hide();
-    $("#myDIV3").hide();
     $("#tabla").hide();
     $("#uno").prop('disabled', true);
+    //$('.mater').prop("disabled", true);
+    $('#mater').prop('disabled', true);
     listar();
-
-    $("#grupo").change(function(){
-        idgrupo = $(this).val();
-        listarP(idgrupo);
-    })
 } );
 
-function listarP(id){
-    $("#tabla").show();
-    listarPf(id);
-}
 /*
-Función para crear tabla de datos de profesor
+Función para eliminar un profesor
 */
-function listarPf(id){
-    console.log(id);
-    $('#grupos').DataTable({
-         destroy: true,
-         //processing: true,
-         serverSide: true,
-         ajax: {url: "/directivo/profesores/e"},
-         columns: [
-            { data: 'name' },
-            { data: 'apellidos' },
-            { 
-                data: 'id',
-                render:function(data,type,row){
-                    return '<a class="fas fa-users-cog fa-1x" style="color:green;" onClick="abrirModal('+data+');" data-toggle="tooltip" data-placement="left" title="Editar Datos Usuario"></a>&nbsp;&nbsp;&nbsp; '
-                },
-                targets: -1 
-            },
+function eliminarAsignacion(id){
 
-         ],
-         aoColumnDefs: [
-            { bSortable: false, aTargets: -1 },
-            { sWidth: "12%", aTargets: -1 },
-         ],
-         "language":{
-            "search": "Buscar",
-            "lengthMenu": "Mostrar _MENU_ usuarios por página",
-            "info": "Mostrando página _PAGE_ de _PAGES_",
-            "zeroRecords": "No se encontraron resultados",
-            "emptyTable": "Ningún dato disponible en esta tabla",
-            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
-            "infoFiltered": "(filtrado de un total de _MAX_ registros)",
-            "infoThousands": ",",
-            "loadingRecords": "Cargando...",
-            "aria": {
-                    "sortAscending": ": Activar para ordenar la columna de manera ascendente",
-                    "sortDescending": ": Activar para ordenar la columna de manera descendente"
-            },
-            "paginate": {
-                "previous":"Anterior",
-                "next": "Siguiente",
-                "first": "Primero",
-                "last": "Último"
+    jQuery.ajax({
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          },
+        url: '/eliminarAsigna/',
+        method: 'post',
+        data:{
+            id: id,
+        },
+        success: function(data){ 
+            if(data == 'Se ha eliminado la asignación'){
+                swal({
+                    title: "Correcto",
+                    text: data,
+                    icon: "success",
+                    showCancelButton: true,
+                    confirmButtonColor: '#f7505a',
+                    cancelButtonColor: '#f7505a',
+                    buttons: {
+                        confirm: true,
+                    }
+                }).then(function() {
+                    listarM();
+                })
+            }else if(data == 'No se pudo eliminar la asignación'){
+                swal("Incorrecto!", data, "error");
+                listarM();
             }
-        }
-      });
+        },
+        error: function (request, status, error) {
+            listarM();
+            alert(request.responseText);
+        },
+    });
+}
 
+
+var selects = $('#grupo, #prof');
+
+$(selects).change(function(){
+    //$('#mater').selectpicker('setStyle', 'disabled', 'remove');
+    var grupo = $('#grupo').val();
+    var prof = $('#prof').val();
+
+
+
+
+
+    if(grupo != null && prof != null){
+        console.log(grupo,prof);
+        $.ajax({
+            headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              },
+            url: '/selectMateria/',
+            method: 'post',
+            data:{
+                grupo: grupo,
+                prof: prof,
+            },
+            success: function(data){ 
+                console.log(data);
+                if(data == 'El profesor no puede impartir más de 8 materias'){
+                    $("#asignar").modal('hide');
+                    swal({
+                        title: "Hubo un problema",
+                        text: data,
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: '#f7505a',
+                        cancelButtonColor: '#f7505a',
+                        buttons: {
+                            confirm: true,
+                        }
+                    }).then(function() {
+                        limpiarSe();
+                        $("#asignar").modal('show');
+                    })
+                }else if(data == 'No hay materias disponibles'){
+                    $("#asignar").modal('hide');
+                    swal({
+                        title: "Hubo un problema",
+                        text: data,
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: '#f7505a',
+                        cancelButtonColor: '#f7505a',
+                        buttons: {
+                            confirm: true,
+                        }
+                    }).then(function() {
+                        limpiarSe();
+                        $("#asignar").modal('show');
+                    }) 
+                }else{
+                    $('#mater').empty().append('<option selected disabled value="0">Selecciona una Materia</option>');
+                    $('#mater').prop('disabled', false);
+                    //$("#mater").append('<option value="0" disabled selected>Selecciona una Materia</option>');
+                    for (let i = 0; i < data.length; i++) 
+                    $("#mater").append(
+                    "<option value='" + data[i]['id'] + "'>" + data[i]['nombre'] + "</option>"
+                    );
+                }
+            },
+            
+        }); 
+    }else{
+        console.log('Selecciona otro');
+    }
+});
+
+function limpiarSe(){
+    $("#grupo").selectpicker('val','0');
+    $("#prof").selectpicker('val','0');
+    $('#mater').prop('disabled', true);
+    $('#mater').empty().append('<option selected disabled value="0">Selecciona una Materia</option>');
+    
+}
+
+function asignacion(){
+    var grupo = $("#grupo").val();
+    var profesor = $("#prof").val();
+    var mater = $("#mater").val();
+
+    if(grupo == null || prof == null || mater == null){
+        $("#asignar").modal('hide');
+        swal({
+            title: "Incorrecto",
+            text: "Los datos no pueden ir vacíos",
+            icon: "error",
+            showCancelButton: true,
+            confirmButtonColor: '#f7505a',
+            cancelButtonColor: '#f7505a',
+            buttons: {
+                confirm: true,
+            }
+
+        }).then(function() {
+            $("#asignar").modal('show');
+        })
+    }else{
+        jQuery.ajax({
+            headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+              },
+            url: '/asignarMa/',
+            method: 'post',
+            data:{
+                grupo: grupo,
+                profesor: profesor,
+                mater: mater,
+            },
+            success: function(data){ 
+                if(data == 'Se ha asignado la materia correctamente'){
+                    $('#asignar').modal('hide');
+                    swal({
+                        title: "Correcto",
+                        text: data,
+                        icon: "success",
+                        showCancelButton: true,
+                        confirmButtonColor: '#f7505a',
+                        cancelButtonColor: '#f7505a',
+                        buttons: {
+                            confirm: true,
+                        }
+    
+                    }).then(function() {
+                        limpiarSe();
+                        listarM();
+                    })
+                }else if(data == 'No se pudo asignar la materia'){
+                    limpiarSe();
+                    listarM();
+                    $('#asignar').modal('hide');
+                    swal("Incorrecto!", data, "error");
+                }
+            },
+            error: function (request, status, error) {
+                $('#asignar').modal('hide');
+                limpiarSe();
+                listarM();
+                alert(request.responseText);
+            },
+        });
+    }
+
+    
 }
 
 /*
@@ -101,7 +236,7 @@ function listar(){
          ],
          "language":{
             "search": "Buscar",
-            "lengthMenu": "Mostrar _MENU_ usuarios por página",
+            "lengthMenu": "Mostrar _MENU_ profesores por página",
             "info": "Mostrando página _PAGE_ de _PAGES_",
             "zeroRecords": "No se encontraron resultados",
             "emptyTable": "Ningún dato disponible en esta tabla",
@@ -125,31 +260,19 @@ function listar(){
 }
 
 function listarM(){
-    $('#materias').DataTable({
+    $('#asignada').DataTable({
          destroy: true,
          //processing: true,
          serverSide: true,
-         ajax: {url: "/directivo/materias/e"},
+         ajax: {url: "/directivo/asignadas"},
          columns: [
-            { data: 'nombre' },
-            { 
-                data: 'unidades',
-                render:function(data,type,row){
-                    return data + ' Unidad (es)'
-                },
-                targets: 1
-            },
-            { 
-                data: 'cuatrimestre',
-                render:function(data,type,row){
-                    return data + ' Cuatrimestre'
-                },
-                targets: 2 
-            },
+            { data: 'grupo' },
+            { data: 'name'},
+            { data: 'materia'},
             { 
                 data: 'id',
                 render:function(data,type,row){
-                    return ' <center><a class="fa fa-tasks fa-1x" style="color:green;" onClick="abrirModalM('+data+');" data-toggle="tooltip" data-placement="left" title="Asignar Materia"></a>'
+                    return ' <center><a class="fa fa-trash-alt fa-1x" style="color:red;" onClick="eliminarAsignacion('+data+');" data-toggle="tooltip" data-placement="left" title="Eliminar Asignación"></a>'
                 },
                 targets: -1 
             },
@@ -161,7 +284,7 @@ function listarM(){
          ],
          "language":{
             "search": "Buscar",
-            "lengthMenu": "Mostrar _MENU_ usuarios por página",
+            "lengthMenu": "Mostrar _MENU_ materias por página",
             "info": "Mostrando página _PAGE_ de _PAGES_",
             "zeroRecords": "No se encontraron resultados",
             "emptyTable": "Ningún dato disponible en esta tabla",
@@ -184,26 +307,20 @@ function listarM(){
     }
 
 function myFunction() {
-    tres = document.getElementById('tres');
-    tres.className="btn btn-ligth";
 
     dos = document.getElementById('dos');
     dos.className="btn btn-light";
 
     uno = document.getElementById('uno');
     uno.className="btn btn-primary";
-    $("#tres").prop('disabled',false);
     $("#dos").prop('disabled',false);
     $("#uno").prop('disabled',true);
     
-    $("#myDIV3").hide();
     $("#myDIV2").hide();
     $("#myDIV").show();
 }
 
 function myFunction2() {
-    tres = document.getElementById('tres');
-    tres.className="btn btn-light";
 
     dos = document.getElementById('dos');
     dos.className="btn btn-primary";
@@ -212,33 +329,12 @@ function myFunction2() {
     uno.className="btn btn-light";
 
     
-    $("#tres").prop('disabled',false);
     $("#uno").prop('disabled',false);
     $("#dos").prop('disabled',true);
-    $("#myDIV3").hide();
     $("#myDIV").hide();
     $("#myDIV2").show();
     listarM();
 }
-
-function myFunction3() {
-    tres = document.getElementById('tres');
-    tres.className="btn btn-primary";
-
-    dos = document.getElementById('dos');
-    dos.className="btn btn-light";
-
-    uno = document.getElementById('uno');
-    uno.className="btn btn-light";
-
-    $("#tres").prop('disabled',true);
-    $("#uno").prop('disabled',false);
-    $("#dos").prop('disabled',false);
-    $("#myDIV").hide();
-    $("#myDIV2").hide();
-    $("#myDIV3").show();
-}
-
 
 function abrirModal(id){
     $('#exampleModal').modal('show');
@@ -261,24 +357,8 @@ function abrirModal(id){
     });
 }
 
-function abrirModalM(id){
-    $('#asignarMateria').modal('show');
-    
-    // Método Ajax
-    /*jQuery.ajax({
-        headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          },
-        url: '/info/' + id,
-        method: 'get',
-        data:{},
-        success: function(data){ 
-            //console.log(data)
-            $('#nombreM2').val(data[0]['name']);
-            $('#unidades2').val(data[0]['apellidos']);  
-            $('.selectpicker').selectpicker('val', data[0]['cuat']); 
-        }
-    });*/
+function modalAsignar(){
+    $('#asignar').modal('show');
 }
 
 function abrirModalCuenta(id) {
@@ -430,10 +510,15 @@ Confirmar para eliminar un profesor
 function eliminar(id){
     swal({
         title: "¿Seguro que desea eliminar este Profesor?",
+        text: "Se eliminarán todos los datos referentes a este",
         icon: "warning",
-        buttons: ["Cancelar","Confirmar"],
-        }).then(function() {
-            eliminarC(id);
+        buttons: true,
+        }).then((willDelete) => {
+            if(willDelete){
+                eliminarC(id);
+            }else{
+                swal.close();
+            }
         });
 }
 
@@ -505,7 +590,7 @@ function nuevoP(){
             pass: pass
         },
         success: function(data){ 
-            if(data == 'Se ha agragado el nuevo profesor'){
+            if(data == 'Se ha agregado el nuevo profesor'){
                 $('#modalNuevo').modal('hide');
                 swal({
                     title: "Correcto",
