@@ -8,6 +8,7 @@ use JeroenNoten\LaravelAdminLte\Events\BuildingMenu;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;   
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -49,8 +50,8 @@ class AppServiceProvider extends ServiceProvider
             return false;
         });   
 
-        if ($this->app->environment() !== 'production') {
-            $this->app->register(IdeHelperServiceProvider::class);
+        if(env('APP_ENV') === 'production'){
+            URL::forceScheme('https');
         }
     }
 }
