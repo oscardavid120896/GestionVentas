@@ -122,7 +122,8 @@
       </div>
       <div class="modal-body">
         <form method="POST" id="nuevoProfesor" >
-
+        @csrf
+        @method('PUT')
         <input type="hidden" class="form-control" id="id"> 
         <label id="lblnombre" for="nombre">Nombre</label>
         <input type="text" class="form-control" id="nombre" aria-describedby="inputGroupPrepend" required maxlength="50">
@@ -157,7 +158,8 @@
       </div>
       <div class="modal-body">
         <form method="POST" id="cuenta">
-
+        @csrf
+        @method('PUT')
             <input type="hidden" class="form-control" id="id2"> 
             <label id="lblcedula" for="cedula">Cédula</label>
             <input type="text" class="form-control" id="cedula" required maxlength="6">
@@ -197,6 +199,8 @@
       </div>
       <div class="modal-body">
         <form method="POST" id="nuevoProfesor2">
+        @csrf
+        @method('PUT')
 
             <label id="lblnombre2" for="nombre">Nombre</label>
             <input type="text" class="form-control" id="nombre2" required maxlength="50">
@@ -238,7 +242,9 @@
         </button>
       </div>
       <div class="modal-body">
-        <form method="POST">
+        <form method="POST" action="...">
+        @csrf
+        @method('PUT')
           <div style="display:flex;">
 
             <div id="divGrupo">
