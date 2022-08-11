@@ -49,8 +49,8 @@ class AppServiceProvider extends ServiceProvider
             return false;
         });   
 
-        if (env('REDIRECT_HTTPS')) {
-            $url->formatScheme('https://');
+        if ($this->app->environment() !== 'production') {
+            $this->app->register(IdeHelperServiceProvider::class);
         }
     }
 }
