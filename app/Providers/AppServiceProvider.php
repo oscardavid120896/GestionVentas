@@ -49,8 +49,8 @@ class AppServiceProvider extends ServiceProvider
             return false;
         });   
 
-        if (env('APP_ENV') === 'production') {
-            \Illuminate\Support\Facades\URL::forceScheme('https');
-        }  
+        if (env('REDIRECT_HTTPS')) {
+            $url->formatScheme('https://');
+        }
     }
 }
