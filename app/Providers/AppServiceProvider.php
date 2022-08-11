@@ -47,6 +47,10 @@ class AppServiceProvider extends ServiceProvider
                 return true;
             }
             return false;
-        });       
+        });   
+
+        if(config('app.env') === 'production'){
+            URL::forceScheme('https');
+        }    
     }
 }
