@@ -83,7 +83,9 @@ function nuevoG(){
             alertify.notify('Los datos no pueden estar vacíos', 'primary', 2, function(){console.log('dismissed');});
         }else{
             jQuery.ajax({
-
+                headers: {
+                  'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                  },
                 url: '/nuevoG/',
                 method: 'get',
                 data:{
