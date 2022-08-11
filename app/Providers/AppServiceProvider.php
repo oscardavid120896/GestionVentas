@@ -49,8 +49,8 @@ class AppServiceProvider extends ServiceProvider
             return false;
         });   
 
-        if ($this->app->environment() !== 'production') {
-            $this->app->register(IdeHelperServiceProvider::class);
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
         }   
     }
 }
