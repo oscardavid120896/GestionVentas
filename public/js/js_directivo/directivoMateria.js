@@ -374,6 +374,8 @@ function eliminarM(id){
                 })
             }else if(data == 'No existe la materia'){
                 swal("Incorrecto!", data, "error");
+            }else if(data == 'No se puede eliminar la materia, ya que aún esta asignada'){
+                swal("Incorrecto!", data, "warning");
             }
         },
         error: function (request, status, error) {

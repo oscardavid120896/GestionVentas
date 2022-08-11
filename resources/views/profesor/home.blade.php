@@ -27,6 +27,8 @@
 <br>
 {{ Breadcrumbs::render('home')}}
 
+<div id="alerta"><p>Aún no tiene materias asignadas</p></div>
+<input type="hidden" value="{{$datos}}" id="datos">
 <div id="materias">
     <div class="row">
     @foreach($datos as $d)
@@ -59,6 +61,7 @@
 </div>
 
 <div id="unidades">
+    <div id="alerta2">Aún no hay alumnos registrados</div>
 </div>
 <input type="hidden" id="idg">
 

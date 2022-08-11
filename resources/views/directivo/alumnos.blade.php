@@ -132,7 +132,7 @@
             <div id="feedback-emailE"></div>
 
             <label id="lblgrupoE" for="grupoE">Grupo</label><br>
-            <select id="grupoE" class="form-control" data-live-search="true">
+            <select id="grupoE" class="form-control" data-live-search="true" disabled>
                 <option disabled value="0">Seleccione un grupo...</option>
                 @foreach($gr as $g)
                 <option value="{{$g->id}}">{{$g->nombreGrupo}}</option>

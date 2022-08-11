@@ -304,6 +304,7 @@ function validar(){
     var nombre = document.getElementById("nombreA");
     var app = document.getElementById("apellidos");
     var email = document.getElementById("email");
+    var eme = $("#email").val();
     var grupo = document.getElementById("grupo");
 
     if (nombre.value.trim() == "") {
@@ -332,6 +333,21 @@ function validar(){
         }
     }
 
+    var em = validarCorreo(eme);
+    if (eme == "") {
+        addError(email, "Campo requerido");
+        bandera = false;
+    } else {
+        if (em == "") {
+            addError(email, "El email es incorrecto");
+            bandera = false;
+        }else if(em == "Es incorrecta"){
+            addError(email, "El email es incorrecto");
+            bandera = false;
+        }
+    }
+
+
     if(grupo.selectedOptions[0].value == 0 ){
         $("#mensaje").show();
         document.getElementById("mensaje").style.color = "red";
@@ -356,6 +372,7 @@ function validarE(){
     var nombre = document.getElementById("nombreAE");
     var app = document.getElementById("apellidosE");
     var email = document.getElementById("emailE");
+    var eme = $("#emailE").val();
     var grupo = document.getElementById("grupoE");
 
     if (nombre.value.trim() == "") {
@@ -367,6 +384,20 @@ function validarE(){
             bandera = false;
         }else if(nombre.value.trim().length > 50){
             addError(nombre, "El máximo son 50 caracteres");
+            bandera = false;
+        }
+    }
+
+    var em = validarCorreo(eme);
+    if (eme == "") {
+        addError(email, "Campo requerido");
+        bandera = false;
+    } else {
+        if (em == "") {
+            addError(email, "El email es incorrecto");
+            bandera = false;
+        }else if(em == "Es incorrecta"){
+            addError(email, "El email es incorrecto");
             bandera = false;
         }
     }
@@ -397,4 +428,14 @@ function validarE(){
     }
 
     return bandera;
+}
+
+function validarCorreo(valor){
+    var res = "";
+    if (/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(valor)){
+        res = "Es correcta";
+       } else {
+        res = "Es incorrecta";
+       }
+    return res;
 }

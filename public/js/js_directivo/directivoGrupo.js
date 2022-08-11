@@ -292,6 +292,10 @@ function eliminarG(id){
                 })
             }else if(data == 'No existe el Grupo'){
                 swal("Incorrecto!", data, "error");
+            }else if(data == "No se puede eliminar el grupo, ya que aún hay alumnos"){
+                swal("Incorrecto!", data, "warning");
+            }else if(data == "No se puede eliminar el grupo, ya que aún hay materias asignadas"){
+                swal("Incorrecto!", data, "warning");
             }
         },
         error: function (request, status, error) {

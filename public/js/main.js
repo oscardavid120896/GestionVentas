@@ -35,14 +35,19 @@ function validar() {
 
     var bandera = true;
     var email = document.getElementById("email");
+    var eme = $("#email").val();
     var password = document.getElementById("password");
 
-    if (email.value.trim() == "") {
+    var em = validarCorreo(eme);
+    if (eme == "") {
         addError(email, "Campo requerido");
         bandera = false;
     } else {
-        if (email.value.trim().length < 10) {
-            addError(nombre, "El mínimo son 10 cáracteres");
+        if (em == "") {
+            addError(email, "El email es incorrecto");
+            bandera = false;
+        }else if(em == "Es incorrecta"){
+            addError(email, "El email es incorrecto");
             bandera = false;
         }
     }
@@ -52,4 +57,14 @@ function validar() {
 		bandera = false;
 	}
     return bandera;
+}
+
+function validarCorreo(valor){
+    var res = "";
+    if (/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(valor)){
+        res = "Es correcta";
+       } else {
+        res = "Es incorrecta";
+       }
+    return res;
 }

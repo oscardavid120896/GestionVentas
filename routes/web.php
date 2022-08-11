@@ -59,7 +59,7 @@ Route::get('/directivo/asignadas', [App\Http\Controllers\DirectivoController:: c
 
 //Rutas de Alumno
 Route::get('/alumno', [App\Http\Controllers\AlumnoController::class, 'indexA'])->name('alumno');
-Route::get('/misCal', [App\Http\Controllers\AlumnoController::class, 'misCal']);
+Route::post('/misCal', [App\Http\Controllers\AlumnoController::class, 'misCal']);
 
 //Rutas de Profesor
 Route::get('/profesor', [App\Http\Controllers\ProfesorController::class, 'indexP'])->name('profesor');

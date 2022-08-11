@@ -390,21 +390,15 @@ function modalNuevo() {
 
 
 /*
-Función  para limpiar campos
-*/
-function limpiar(){
-    $('#nombre').val();
-    $('#apellidos').val();
-    $('#email').val();
-}
-
-/*
 Función para editar un usuario
 */
 function editarP(){
-    var nombre = $('#nombre').val();
-    var apellidos = $('#apellidos').val();
-    var id = $('#id').val();
+    var bandera = validarE();
+
+    if(bandera){
+        var nombre = $('#nombre').val();
+        var apellidos = $('#apellidos').val();
+        var id = $('#id').val();
 
     if(nombre == "" || apellidos == ""){
         alertify.notify('Los datos no pueden estar vacíos', 'primary', 2, function(){console.log('dismissed');});
@@ -448,6 +442,8 @@ function editarP(){
         },
     });
     }
+    }
+    
 }
 
 
@@ -455,53 +451,61 @@ function editarP(){
 Función para editar campos de la cuenta
 */
 function editarCuenta(){
-    var cedula = $('#cedula').val();
+    var bandera = validarC();
+
+    if(bandera){
+        var cedula = $('#cedula').val();
     var rol = $('#rol').val();
     var id = $('#id2').val();
     var email = $("#email").val();
     console.log(id);
     console.log(rol);
-    
-    jQuery.ajax({
-        headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          },
-        url: '/editarC/',
-        method: 'post',
-        data:{
-            cedula: cedula,
-            rol: rol,
-            id: id,
-            email: email
-        },
-        success: function(data){ 
-            console.log(data);
-            if(data == 'La cuenta del profesor ha sido actualizada'){
-                $('#exampleModal2').modal('hide');
-                swal({
-                    title: "Correcto",
-                    text: data,
-                    icon: "success",
-                    showCancelButton: true,
-                    confirmButtonColor: '#f7505a',
-                    cancelButtonColor: '#f7505a',
-                    buttons: {
-                        confirm: true,
-                    }
+    if(cedula == "" || rol == "" || email == ""){
+        alertify.notify('Los datos no pueden estar vacíos', 'primary', 2, function(){console.log('dismissed');});
+    }else{
+        jQuery.ajax({
+            headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/editarC/',
+            method: 'post',
+            data:{
+                cedula: cedula,
+                rol: rol,
+                id: id,
+                email: email
+            },
+            success: function(data){ 
+                console.log(data);
+                if(data == 'La cuenta del profesor ha sido actualizada'){
+                    $('#exampleModal2').modal('hide');
+                    swal({
+                        title: "Correcto",
+                        text: data,
+                        icon: "success",
+                        showCancelButton: true,
+                        confirmButtonColor: '#f7505a',
+                        cancelButtonColor: '#f7505a',
+                        buttons: {
+                            confirm: true,
+                        }
 
-                }).then(function() {
-                    listar();
-                })
-            }else if(data == 'No existe la cuenta del profesor'){
-                $('#exampleModal2').modal('hide');
-                swal("Incorrecto!", data, "error");
-            }
-        },
-        error: function (request, status, error) {
-            //$('#exampleModal').modal('hide');
-            alert(request.responseText);
-        },
-    });
+                    }).then(function() {
+                        listar();
+                    })
+                }else if(data == 'No existe la cuenta del profesor'){
+                    $('#exampleModal2').modal('hide');
+                    swal("Incorrecto!", data, "error");
+                }
+            },
+            error: function (request, status, error) {
+                //$('#exampleModal').modal('hide');
+                alert(request.responseText);
+            },
+        });
+    }
+    }
+    
 }
 
 /*
@@ -567,53 +571,271 @@ function eliminarC(id){
 Función para agregar una nueva cuenta de Profesor
 */
 function nuevoP(){
-    var nombre = $('#nombre2').val();
-    var apellidos = $('#apellidos2').val();
-    var cedula = $('#cedula2').val();
-    var puesto = 'Profesor';
-    var email = $('#email2').val();
-    var pass = $('#pass').val();
+    var bandera = validar();
+
+    if(bandera){
+        var nombre = $('#nombre2').val();
+        var apellidos = $('#apellidos2').val();
+        var cedula = $('#cedula2').val();
+        var puesto = 'Profesor';
+        var email = $('#email2').val();
+        var pass = $('#pass').val();
+        
+
+        jQuery.ajax({
+            headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/nuevoP/',
+            method: 'post',
+            data:{
+                nombre: nombre,
+                apellidos: apellidos,
+                cedula: cedula,
+                puesto: puesto,
+                email: email,
+                pass: pass
+            },
+            success: function(data){ 
+                if(data == 'Se ha agregado el nuevo profesor'){
+                    $('#modalNuevo').modal('hide');
+                    swal({
+                        title: "Correcto",
+                        text: data,
+                        icon: "success",
+                        showCancelButton: true,
+                        confirmButtonColor: '#f7505a',
+                        cancelButtonColor: '#f7505a',
+                        buttons: {
+                            confirm: true,
+                        }
+
+                    }).then(function() {
+                        limpiar();
+                        listar();
+                    })
+                }else if(data == 'Ya existe el profesor con la misma cédula'){
+                    $('#modalNuevo').modal('hide');
+                    limpiar();
+                    swal("Incorrecto!", data, "error");
+                }
+            },
+            error: function (request, status, error) {
+                limpiar();
+                $('#modalNuevo').modal('hide');
+                alert(request.responseText);
+            },
+        });
+    }
+
     
+}
 
-    jQuery.ajax({
-        headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          },
-        url: '/nuevoP/',
-        method: 'post',
-        data:{
-            nombre: nombre,
-            apellidos: apellidos,
-            cedula: cedula,
-            puesto: puesto,
-            email: email,
-            pass: pass
-        },
-        success: function(data){ 
-            if(data == 'Se ha agregado el nuevo profesor'){
-                $('#modalNuevo').modal('hide');
-                swal({
-                    title: "Correcto",
-                    text: data,
-                    icon: "success",
-                    showCancelButton: true,
-                    confirmButtonColor: '#f7505a',
-                    cancelButtonColor: '#f7505a',
-                    buttons: {
-                        confirm: true,
-                    }
+function limpiar(){
+    var form = document.getElementById("nuevoProfesor2");
+    limpiarErrores(form);
+    $('#nombre2').val("");
+    $('#apellidos2').val("");
+    $('#cedula2').val("");
+    $('#email2').val("");
+    $('#pass').val("");
+}
 
-                }).then(function() {
-                    listar();
-                })
-            }else if(data == 'Ya existe el profesor con la misma cédula'){
-                $('#modalNuevo').modal('hide');
-                swal("Incorrecto!", data, "error");
-            }
-        },
-        error: function (request, status, error) {
-            $('#modalNuevo').modal('hide');
-            alert(request.responseText);
-        },
-    });
+function validar(){
+    var form = document.getElementById("nuevoProfesor2");
+    limpiarErrores(form);
+
+    var nombre = document.getElementById("nombre2"); 
+    var apellidos = document.getElementById("apellidos2"); 
+    var cedula = document.getElementById("cedula2"); 
+    var email = $("#email2").val(); 
+    var errE = document.getElementById("email2"); 
+    var pass = document.getElementById("pass"); 
+    var bandera = true;
+
+    if (nombre.value.trim() == "") {
+        addError(nombre, "Campo requerido");
+        bandera = false;
+    } else {
+        if (nombre.value.trim().length < 3) {
+            addError(nombre, "El minimo son 3 caracteres");
+            bandera = false;
+        }else if(nombre.value.trim().length > 40){
+            addError(nombre, "El máximo son 40 caracteres");
+            bandera = false;
+        }
+    }
+
+    //
+    var em = validarCorreo(email);
+    if (errE.value.trim() == "") {
+        addError(errE, "Campo requerido");
+        bandera = false;
+    } else {
+        if (em == "") {
+            addError(errE, "El email es incorrecto");
+            bandera = false;
+        }else if(em == "Es incorrecta"){
+            addError(errE, "El email es incorrecto");
+            bandera = false;
+        }
+    }
+
+    //
+    if (pass.value.trim() == "") {
+        addError(pass, "Campo requerido");
+        bandera = false;
+    } else {
+        if (pass.value.trim().length < 8) {
+            addError(pass, "El minimo son 8 caracteres");
+            bandera = false;
+        }else if(pass.value.trim().length > 9){
+            addError(pass, "El máximo son 8 caracteres");
+            bandera = false;
+        }
+    }
+
+    //
+    if (apellidos.value.trim() == "") {
+        addError(apellidos, "Campo requerido");
+        bandera = false;
+    } else {
+        if (apellidos.value.trim().length < 3) {
+            addError(apellidos, "El minimo son 3 caracteres");
+            bandera = false;
+        }else if(apellidos.value.trim().length > 25){
+            addError(apellidos, "El máximo son 25 caracteres");
+            bandera = false;
+        }
+    }
+
+    //
+    if (cedula.value.trim() == "") {
+        addError(cedula, "Campo requerido");
+        bandera = false;
+    } else {
+        if (cedula.value.trim().length < 6) {
+            addError(cedula, "El minimo son 6 caracteres");
+            bandera = false;
+        }else if(cedula.value.trim().length > 6){
+            addError(cedula, "El máximo son 6 caracteres");
+            bandera = false;
+        }
+    }
+
+    return bandera;
+}
+
+
+function validarCorreo(valor){
+    var res = "";
+    if (/^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i.test(valor)){
+        res = "Es correcta";
+       } else {
+        res = "Es incorrecta";
+       }
+    return res;
+}
+
+//
+
+function limpiarE(){
+    var form = document.getElementById("nuevoProfesor");
+    limpiarErrores(form);
+    $('#nombre2').val("");
+    $('#apellidos2').val("");
+    $('#cedula2').val("");
+    $('#email2').val("");
+    $('#pass').val("");
+}
+
+function limpiarC(){
+    var form = document.getElementById("cuenta");
+    limpiarErrores(form);
+    $('#cedula').val("");
+    $('#email').val("");
+
+}
+
+function validarE(){
+    var form = document.getElementById("nuevoProfesor");
+    limpiarErrores(form);
+
+    var nombre = document.getElementById("nombre"); 
+    var apellidos = document.getElementById("apellidos"); 
+    var nom = $("#nombre").val();
+    var ape = $("#apellidos").val();
+    var bandera = true;
+
+    if (nom == "") {
+        addError(nombre, "Campo requerido");
+        bandera = false;
+    } else {
+        if (nom.length < 3) {
+            addError(nombre, "El minimo son 3 caracteres");
+            bandera = false;
+        }else if(nom.length > 40){
+            addError(nombre, "El máximo son 40 caracteres");
+            bandera = false;
+        }
+    }
+
+    //
+    if (ape == "") {
+        addError(apellidos, "Campo requerido");
+        bandera = false;
+    } else {
+        if (ape.length < 3) {
+            addError(apellidos, "El minimo son 3 caracteres");
+            bandera = false;
+        }else if(ape.length > 25){
+            addError(apellidos, "El máximo son 25 caracteres");
+            bandera = false;
+        }
+    }
+
+    return bandera;
+}
+
+function validarC(){
+    var form = document.getElementById("cuenta");
+    limpiarErrores(form);
+
+    var cedula = document.getElementById("cedula"); 
+    var email = document.getElementById("email"); 
+    var nom = $("#cedula").val();
+    var eme = $("#email").val();
+    var bandera = true;
+
+    if (nom == "") {
+        addError(cedula, "Campo requerido");
+        bandera = false;
+    } else {
+        if (nom.length < 3) {
+            addError(cedula, "El minimo son 3 caracteres");
+            bandera = false;
+        }else if(nom.length > 40){
+            addError(cedula, "El máximo son 40 caracteres");
+            bandera = false;
+        }
+    }
+
+    //
+
+    var em = validarCorreo(eme);
+    if (eme == "") {
+        addError(email, "Campo requerido");
+        bandera = false;
+    } else {
+        if (em == "") {
+            addError(email, "El email es incorrecto");
+            bandera = false;
+        }else if(em == "Es incorrecta"){
+            addError(email, "El email es incorrecto");
+            bandera = false;
+        }
+    }
+
+
+    return bandera;
 }

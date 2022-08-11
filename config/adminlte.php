@@ -282,12 +282,6 @@ return [
                     'url'  => 'directivo/materias',
                     'icon' => 'fas fa-folder-open'
                 ],
-                [
-                    'text' => 'Reportes',
-                    'url' => '#',
-                    'icon' => 'fas fa-chart-line',
-                    //'icon_color' => 'success',
-                ],
             ],
         ],
         /*['header' => 'labels'],

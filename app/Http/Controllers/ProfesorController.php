@@ -47,7 +47,19 @@ class ProfesorController extends Controller
     public function revisar(Request $request){
         $id = $request->input('id');
 
-        $datos = GrupoProfesor::join('grupo','grupoProfesor.idGrupo','=','grupo.id')
+        $datosd = GrupoProfesor::join('grupo','grupoProfesor.idGrupo','=','grupo.id')
+        ->join('materia','grupoProfesor.idMateria','=','materia.id')
+        ->where('grupoProfesor.id','=',$id)
+        ->get(['materia.id as idMateria','grupoProfesor.id as idGP','materia.nombre as nombreM', 'grupo.nombreGrupo',
+            'materia.unidades','grupo.id as idGrupo']);
+        
+
+        $alumnosd = Alumno::join('users','alumno.idUsuario','=','users.id')
+        ->where('alumno.idGrupo','=',$datosd[0]['idGrupo'])
+        ->count();
+        
+        if($alumnosd > 0){
+            $datos = GrupoProfesor::join('grupo','grupoProfesor.idGrupo','=','grupo.id')
         ->join('materia','grupoProfesor.idMateria','=','materia.id')
         ->where('grupoProfesor.id','=',$id)
         ->get(['materia.id as idMateria','grupoProfesor.id as idGP','materia.nombre as nombreM', 'grupo.nombreGrupo',
@@ -68,7 +80,24 @@ class ProfesorController extends Controller
 
         //$calificaciones = $datos[0]['unidades'];
 
-        if($alumnos->count() == 0){
+        for($j = 0; $j < $alumnos2->count(); $j++){
+            for($i = 0; $i < $uni->count(); $i++){
+                $cal = new Calificacion;
+                $cal->calificacion = 0;
+                $cal->idAlumno = $alumnos2[$j]['idUsuario'];
+                $cal->idUnidad = $uni[$i]['id'];
+                $cal->idGrupoProfesor = $datos[0]['idGP'];
+                $cal->save();
+            }
+        }
+
+        $i=0;
+        foreach($alumnos as $a){
+            $total[$i] = $a->idAlumno;
+            $i++;
+        }
+
+        /*if($alumnos->count() == 0){
             for($j = 0; $j < $alumnos2->count(); $j++){
                 for($i = 0; $i < $uni->count(); $i++){
                     $cal = new Calificacion;
@@ -85,7 +114,7 @@ class ProfesorController extends Controller
                 $total[$i] = $a->idAlumno;
                 $i++;
             }
-        }
+        }*/
 
                 
         $alumnos3 = Alumno::join('users','alumno.idUsuario','=','users.id')
@@ -97,7 +126,10 @@ class ProfesorController extends Controller
         'calificacion.calificacion as cal', 'users.apellidos', 'users.id as idAlumno','calificacion.id as idCal']);
             
         $nDatos = array_merge(array($datos),array($alumnos3),array($alumnos2->count()),array($alumnos5));
-
+        }else{
+            $nDatos = "Aún no hay alumnos registrados";
+        }
+        
         return response()->json($nDatos);
     }
 

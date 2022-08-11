@@ -204,7 +204,7 @@ class DirectivoController extends Controller
                     $k++;
                 }
                 Calificacion::whereIn('idGrupoProfesor',$num3)->delete();
-                }
+            }
                 
                 GrupoProfesor::where('idProfesor','=',$id2)->delete();
                 Profesor::where('idUsuario', '=', $id2)->delete();
@@ -399,7 +399,7 @@ class DirectivoController extends Controller
                         Calificacion::whereIn('idUnidad',$num3)->delete();
                     }
                     
-                    GrupoProfesor::where('idMateria','=',$id)->delete();
+                    //GrupoProfesor::where('idMateria','=',$id)->delete();
 
                     Unidad::where('idMateria', '=', $id)->delete();
 
@@ -429,23 +429,15 @@ class DirectivoController extends Controller
                 $existe = Materia::where('id','=',$id)->count();
                 
                 if($existe > 0){
-                    $datoLR = Unidad::where('idMateria','=',$id)->get();
-                    if($datoLR->count() == 0){
-
+                    $datoLR = GrupoProfesor::where('idMateria','=',$id)->get();
+                    if($datoLR->count() > 0){
+                        $respuesta = "No se puede eliminar la materia, ya que aún esta asignada";
                     }else{
-                        $k = 0;
-                        foreach($datoLR as $sku){
-                            $num3[$k] = $sku->id;
-                            
-                            $k++;
-                        }
-                        Calificacion::whereIn('idUnidad',$num3)->delete();
-                    }
-                    GrupoProfesor::where('idMateria','=',$id)->delete();
-                    Unidad::where('idMateria','=',$id)->delete();
-                    Materia::where('id', '=', $id)->delete();
+                        Unidad::where('idMateria','=',$id)->delete();
+                        Materia::where('id', '=', $id)->delete();
 
-                    $respuesta = "La materia ha sido eliminada"; 
+                        $respuesta = "La materia ha sido eliminada"; 
+                    }
                 }else{
                     $respuesta = "No existe la materia";
                 }
@@ -580,26 +572,17 @@ class DirectivoController extends Controller
             
             if($existe > 0){
                 $datoLR = Alumno::where('idGrupo', '=', $id)->get();
-                if($datoLR->count() == 0){
-
+                if($datoLR->count() > 0){
+                    $respuesta = "No se puede eliminar el grupo, ya que aún hay alumnos";
                 }else{
-                    $k = 0;
-                    foreach($datoLR as $sku){
-                        $num3[$k] = $sku->idUsuario;
-                        
-                        $k++;
+                    $dato2 = GrupoProfesor::where('idGrupo','=',$id)->get();
+                    if($dato2->count() > 0 ){
+                        $respuesta = "No se puede eliminar el grupo, ya que aún hay materias asignadas";
+                    }else{
+                        Grupo::where('id', '=', $id)->delete();
+                        $respuesta = "El Grupo ha sido eliminado"; 
                     }
-
-                }
-                Calificacion::whereIn('idAlumno',$num3)->delete();
-                GrupoProfesor::where('idGrupo','=',$id)->delete();
-                Alumno::where('idGrupo','=',$id)->delete();
-                User::whereIn('id',$num3)->delete();
-                Grupo::where('id', '=', $id)->delete();
-               
-                
-
-                $respuesta = "El Grupo ha sido eliminado"; 
+                }            
             }else{
                 $respuesta = "No existe el Grupo";
             }
@@ -770,6 +753,7 @@ class DirectivoController extends Controller
             
             if($existe > 0){
 
+                Calificacion::where('idAlumno','=',$id)->delete();
                 Alumno::where('idUsuario', '=', $id)->delete();
                 User::where('id', '=', $id)->delete();
 
@@ -797,69 +781,69 @@ class DirectivoController extends Controller
                     ['idProfesor', '=', $idProf],
                     ['idGrupo','=',$idGrupo]
                 ])->count();
-
-                if($existe > 0 && $existe < 8){
-                    
-                    $query = GrupoProfesor::select('idMateria')->where([
-                        ['idGrupo','=',$idGrupo],
-                        ['idProfesor','=',$idProf]
-                    ])->get();
-                    
-                    //$anketa = DB::table('materia')->select('');
-                    
+                
+                if($existe > 0){
+                    $query = GrupoProfesor::join('materia','grupoProfesor.idMateria','=','materia.id')
+                    ->where([
+                        ['idProfesor', '=', $idProf],
+                        ['idGrupo','=',$idGrupo]
+                    ])->get('grupoProfesor.idMateria');
                     $i = 0;
                     foreach($query as $sku){
                         $num[$i] = json_decode((int)$sku->idMateria, true);
                         
                         $i++;
                     }
-                    
-                    $datosR = Materia::select('*')->whereNotIn('id',$num)->get();
+                    $existe2 = GrupoProfesor::join('materia','grupoProfesor.idMateria','=','materia.id')
+                    ->where([
+                        ['idProfesor', '!=', $idProf],
+                        ['idGrupo','=',$idGrupo]
+                    ])->count();
 
-                    if($datosR->count() == 0){
-                        $datos = 'No hay materias disponibles';
+                    if($existe2 > 0){
+                        $query2 = GrupoProfesor::join('materia','grupoProfesor.idMateria','=','materia.id')
+                        ->where([
+                            ['idProfesor', '!=', $idProf],
+                            ['idGrupo','=',$idGrupo]
+                        ])->get('grupoProfesor.idMateria');
+                        $i = 0;
+                        foreach($query as $sku){
+                            $num2[$i] = json_decode((int)$sku->idMateria, true);
+                        
+                            $i++;
+                        }
+                        $total = array_merge($num,$num2);
+                        $datos = Materia::select('*')->whereNotIn('id',$total)->get();
                     }else{
-                        $j = 0;
-                        foreach($datosR as $sku){
-                            $num2[$j] = json_decode((int)$sku->id, true);
-                            
-                            $j++;
-                        }
-                        $datoLR = GrupoProfesor::select('*')->where([
-                            ['idGrupo','=', $idGrupo]
-                        ])->whereIn('idMateria',$num2)->get();
-
-                        if($datoLR->count() == 0){
-                            $datos = "Algo";
+                        $datosR = Materia::select('*')->whereNotIn('id',$num)->count();
+                        if($datosR > 0){
+                            $datos = Materia::select('*')->whereNotIn('id',$num)->get();
                         }else{
-                            $k = 0;
-                            foreach($datoLR as $sku){
-                                $num3[$k] = $sku->idMateria;
-                            
-                                $k++;
-                            }
-
-                            $num5 = array_diff($num2, $num3);
-
-                            $df = Materia::select('*')->whereIn('id',$num5)->get();
-                            if($df->count() == 0){
-                                $datos = "No hay materias disponibles";
-                            }else{
-                                $datos = Materia::select('*')->whereIn('id',$num5)->get();
-                            }
-
+                            $datos = "No hay materias disponibles";
                         }
+                    }   
+                }else{
+                    $exister = GrupoProfesor::join('materia','grupoProfesor.idMateria','=','materia.id')
+                    ->where('idGrupo','=',$idGrupo)->count();
+                    if($exister > 0){
+                        $mat = GrupoProfesor::join('materia','grupoProfesor.idMateria','=','materia.id')
+                        ->where('idGrupo','=',$idGrupo)->get('grupoProfesor.idMateria');
+                        $i = 0;
+                        foreach($mat as $sku){
+                            $num2[$i] = json_decode((int)$sku->idMateria, true);
+                        
+                            $i++;
+                        }
+                        $datosR = Materia::select('*')->whereNotIn('id',$num2)->count();
+                        if($datosR > 0){
+                            $datos = Materia::select('*')->whereNotIn('id',$num2)->get();
+                        }else{
+                            $datos = "No hay materias disponibles";
+                        }
+                    }else{
+                        $datos = Materia::all();
                     }
-                   /* $asignar = new GrupoProfesor;
-                    $asignar->idGrupo = $idGrupo;
-                    $asignar->idProfesor = $idProf;
-                    $asignar->idMateria = $idMat;*/
-                }else if($existe == 0){ 
-                    $datos = Materia::all();
-                }else if($existe >= 8){
-                    $datos = "El profesor no puede impartir más de 8 materias";
                 }
-    
             }else{
                 $datos = "No se pudo recuperar la información";
             }
@@ -971,7 +955,6 @@ public function eliminarAsigna(Request $request){
         if($existe > 0){
             Calificacion::where('idGrupoProfesor','=',$id)->delete();
             GrupoProfesor::where('id', '=', $id)->delete();
-
 
             $respuesta = "Se ha eliminado la asignación"; 
         }else{

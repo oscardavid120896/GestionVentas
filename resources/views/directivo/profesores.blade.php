@@ -121,27 +121,23 @@
         </button>
       </div>
       <div class="modal-body">
-        <form method="POST" id="nuevoProfesor" novalidate onsubmit="return false">
+        <form method="POST" id="nuevoProfesor" >
 
         <input type="hidden" class="form-control" id="id"> 
         <label id="lblnombre" for="nombre">Nombre</label>
-        <input type="text" class="form-control" id="nombre" aria-describedby="inputGroupPrepend" required>
-        <div class="invalid-feedback">
-            Favor de llenar este campo
-        </div>
+        <input type="text" class="form-control" id="nombre" aria-describedby="inputGroupPrepend" required maxlength="50">
+        <div id="feedback-nombre"></div>
 
-        <label for="apellidos">Apellidos</label>
-        <input type="text" class="form-control" id="apellidos" aria-describedby="inputGroupPrepend" required>
-        <div class="invalid-feedback">
-            Favor de llenar este campo
-        </div>
+        <label id="lblapellidos" for="apellidos">Apellidos</label>
+        <input type="text" class="form-control" id="apellidos" aria-describedby="inputGroupPrepend" required maxlength="50">
+        <div id="feedback-apellidos"></div>
 
         <label for="puesto">Puesto</label>
         <input type="text" class="form-control" id="puesto" disabled>
 
         <div class="modal-footer">
-            <button type="button" onclick="limpiar();" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            <button type="submit" value="submit" id="btn1" onclick="editarP();" class="btn btn-primary">Guardar información</button>
+            <button type="button" onclick="limpiarE();" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            <button type="button" value="submit" id="btn1" onclick="editarP();" class="btn btn-primary">Guardar información</button>
         </div>
         </form> 
       </div>
@@ -160,14 +156,17 @@
         </button>
       </div>
       <div class="modal-body">
-        <form method="POST">
+        <form method="POST" id="cuenta">
 
             <input type="hidden" class="form-control" id="id2"> 
-            <label for="cedula">Cédula</label>
-            <input type="text" class="form-control" id="cedula" required>
+            <label id="lblcedula" for="cedula">Cédula</label>
+            <input type="text" class="form-control" id="cedula" required maxlength="6">
+            <div id="feedback-cedula"></div>
 
-            <label for="correo">Correo Electrónico</label>
-            <input type="email" class="form-control" id="email" required>
+
+            <label id="lblemail" for="correo">Correo Electrónico</label>
+            <input type="email" class="form-control" id="email" required maxlength="50">
+            <div id="feedback-email"></div>
 
             <label for="rol">Puesto: </label><br>
 
@@ -179,7 +178,7 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" onclick="limpiar();" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <button type="button" onclick="limpiarC();" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
         <button type="button" id="btn2" onclick="editarCuenta();" class="btn btn-primary">Guardar información</button>
       </div>
     </div>
@@ -197,22 +196,27 @@
         </button>
       </div>
       <div class="modal-body">
-        <form method="POST">
+        <form method="POST" id="nuevoProfesor2">
 
-            <label for="nombre">Nombre</label>
-            <input type="text" class="form-control" id="nombre2" required>
+            <label id="lblnombre2" for="nombre">Nombre</label>
+            <input type="text" class="form-control" id="nombre2" required maxlength="50">
+            <div id="feedback-nombre2"></div>
 
-            <label for="apellidos">Apellidos</label>
-            <input type="text" class="form-control" id="apellidos2" required>
+            <label id="lblapellidos2" for="apellidos2">Apellidos</label>
+            <input type="text" class="form-control" id="apellidos2" required maxlength="50">
+            <div id="feedback-apellidos2"></div>
 
-            <label for="cedula">Cédula</label>
-            <input type="text" class="form-control" id="cedula2" required>
+            <label id="lblcedula2" for="cedula2">Cédula</label>
+            <input type="text" class="form-control" id="cedula2" required maxlength="6">
+            <div id="feedback-cedula2"></div>
 
-            <label for="correo">Correo Electrónico</label>
+            <label id="lblemail2" for="email2">Correo Electrónico</label>
             <input type="email" class="form-control" id="email2" maxlength="50" required>
+            <div id="feedback-email2"></div>
 
-            <label for="correo">Contraseña</label>
+            <label id="lblpass" for="pass">Contraseña</label>
             <input type="password" class="form-control" id="pass" maxlength="8" required>
+            <div id="feedback-pass"></div>
         </form>
       </div>
       <div class="modal-footer">
@@ -290,4 +294,5 @@
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
 <script src="../js/js_directivo/directivoProfesor.js"></script>
+<script src="../js/validaciones.js"></script>
 @stop

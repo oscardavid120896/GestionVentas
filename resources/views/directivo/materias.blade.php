@@ -120,7 +120,7 @@
       <div class="modal-body">
         <form method="POST" id="editarMateria" novalidate>
 
-            <input type="text" class="form-control" id="idM" aria-describedby="inputGroupPrepend">
+            <input type="hidden" class="form-control" id="idM" aria-describedby="inputGroupPrepend">
 
             <label id="lblnombreME" for="nombreME">Nombre Materia</label><br>
             <input type="text" class="form-control" id="nombreME" aria-describedby="inputGroupPrepend" required>
