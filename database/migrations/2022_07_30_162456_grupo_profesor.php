@@ -24,7 +24,7 @@ return new class extends Migration
             $table->foreign('idMateria')->references('id')->on('materia');
 
             $table->unsignedBigInteger('idProfesor')->unsigned();
-            $table->foreign('idProfesor')->references('idUsuario')->on('profesor');
+            //$table->foreign('idProfesor')->references('idUsuario')->on('profesor');
             $table->timestamps();
         });
     }

@@ -25,10 +25,6 @@ class TodosSeeder extends Seeder
             'rol' => 'directivo',
         ]);
 
-        $grupo1 = Grupo::create([
-            'nombreGrupo' => 'GDGS2091',
-        ]);
-
         $ventas = User::create([
             'name' => 'Diana Angélica',
             'apellidos' => 'García Lira',
