@@ -29,7 +29,7 @@ Route::get('/directivo/grupos', [App\Http\Controllers\DirectivoController:: clas
 Route::get('/directivo/materias', [App\Http\Controllers\DirectivoController:: class, 'getMateriasM'])->name('directivo.materias');
 Route::get('/info/{id}', [App\Http\Controllers\DirectivoController:: class, 'infoUser'])->name('info');
 Route::post('/nuevoP', [App\Http\Controllers\DirectivoController:: class, 'nuevoProfesor']);
-Route::get('/nuevoG', [App\Http\Controllers\DirectivoController:: class, 'nuevoGrupo']);
+Route::post('/nuevoG', [App\Http\Controllers\DirectivoController:: class, 'nuevoGrupo']);
 Route::post('/editarP', [App\Http\Controllers\DirectivoController:: class, 'editarProfesor']);
 Route::post('/editarC', [App\Http\Controllers\DirectivoController:: class, 'editarProfesorC']);
 Route::post('/editarG', [App\Http\Controllers\DirectivoController:: class, 'editarGrupo']);
