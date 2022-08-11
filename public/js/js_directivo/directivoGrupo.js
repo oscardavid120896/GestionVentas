@@ -85,7 +85,7 @@ function nuevoG(){
             jQuery.ajax({
 
                 url: '/nuevoG/',
-                method: 'get',
+                method: 'post',
                 data:{
                     nombre: nombre,
                 },
