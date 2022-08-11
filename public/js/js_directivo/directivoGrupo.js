@@ -77,6 +77,7 @@ function nuevoG(){
     var bandera = validar();
     
     if(bandera){
+        debugger;
         var nombre = $('#nombreG').val();
         if(nombre == ""){
             alertify.notify('Los datos no pueden estar vacíos', 'primary', 2, function(){console.log('dismissed');});
