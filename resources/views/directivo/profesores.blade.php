@@ -293,6 +293,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.14.0-beta3/dist/js/bootstrap-select.min.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
-<script src="../js/js_directivo/directivoProfesor.js"></script>
-<script src="../js/validaciones.js"></script>
+<script src="{{ secure_asset('../js/js_directivo/directivoProfesor.js')}}"></script>
+<script src="{{ secure_asset('../js/validaciones.js')}}"></script>
 @stop
