@@ -65,7 +65,7 @@ Route::post('/eliminarAsigna', [App\Http\Controllers\DirectivoController:: class
 Route::post('/nuevoM', [App\Http\Controllers\DirectivoController:: class, 'agregarMateria']);
 Route::post('/nuevoA', [App\Http\Controllers\DirectivoController:: class, 'agregarAlumno']);
 Route::post('/nuevoP', [App\Http\Controllers\DirectivoController:: class, 'nuevoProfesor']);
-Route::post('/nuevoG', [App\Http\Controllers\DirectivoController:: class, 'nuevoGrupo']);
+Route::get('/nuevoG', [App\Http\Controllers\DirectivoController:: class, 'nuevoGrupo']);
 Route::post('/editarP', [App\Http\Controllers\DirectivoController:: class, 'editarProfesor']);
 Route::post('/editarC', [App\Http\Controllers\DirectivoController:: class, 'editarProfesorC']);
 Route::post('/editarG', [App\Http\Controllers\DirectivoController:: class, 'editarGrupo']);
