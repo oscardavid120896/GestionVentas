@@ -50,7 +50,7 @@ class AppServiceProvider extends ServiceProvider
             return false;
         });   
 
-        if(env('APP_ENV') === 'production'){
+        if(env('APP_ENV') !== 'production'){
             URL::forceScheme('https');
         }
     }
