@@ -86,7 +86,7 @@ function nuevoG(){
                 headers: {
                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                   },
-                url: 'https://tranquil-mountain-72526.herokuapp.com/nuevoG/',
+                url: '/nuevoG/',
                 method: 'post',
                 data:{
                     nombre: nombre,
