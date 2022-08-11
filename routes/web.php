@@ -51,9 +51,7 @@ Route::get('/alumno', [App\Http\Controllers\AlumnoController::class, 'indexA'])-
 //Rutas de Profesor
 Route::get('/profesor', [App\Http\Controllers\ProfesorController::class, 'indexP'])->name('profesor');
 
-
-Route::group(['middleware'=> ['cors']],function(){
-    Route::post('/revisar', [App\Http\Controllers\ProfesorController::class, 'revisar']);
+Route::post('/revisar', [App\Http\Controllers\ProfesorController::class, 'revisar']);
     Route::post('/cali', [App\Http\Controllers\ProfesorController::class, 'cali']);
     Route::post('/misCal', [App\Http\Controllers\AlumnoController::class, 'misCal']);
     Route::post('/selectMateria', [App\Http\Controllers\DirectivoController:: class, 'selectMateria']);
@@ -73,5 +71,7 @@ Route::post('/editarC', [App\Http\Controllers\DirectivoController:: class, 'edit
 Route::post('/editarG', [App\Http\Controllers\DirectivoController:: class, 'editarGrupo']);
 Route::post('/eliminarC', [App\Http\Controllers\DirectivoController:: class, 'eliminarProfesor']);
 Route::post('/nuevoP', [App\Http\Controllers\DirectivoController:: class, 'agregarProfesor']);
+Route::group(['middleware'=> ['cors']],function(){
+    
 });
 
