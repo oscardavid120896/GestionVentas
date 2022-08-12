@@ -15,7 +15,6 @@
 		</div>
 		<div class="login-content">
 			<form method="POST" action="{{ route('login') }}" id="login">
-            @csrf
 				<img src="../img/profile.svg">
 				<h2 class="title">Bienvenido</h2>
                 @error('email')
