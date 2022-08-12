@@ -82,7 +82,7 @@ function nuevoG(){
         if(nombre == ""){
             alertify.notify('Los datos no pueden estar vacíos', 'primary', 2, function(){console.log('dismissed');});
         }else{
-            jQuery.ajax({
+            $.ajax({
                 headers: {
                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                   },
