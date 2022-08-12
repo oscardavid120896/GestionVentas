@@ -18,8 +18,8 @@ return new class extends Migration
             $table->id();
             $table->integer('calificacion');
 
-            $table->unsignedBigInteger('idAlumno')->unsigned();
-            $table->foreign('idAlumno')->references('idUsuario')->on('alumno');
+            $table->integer('idAlumno');
+            
 
             $table->unsignedBigInteger('idGrupoProfesor')->unsigned();
             $table->foreign('idGrupoProfesor')->references('id')->on('grupoProfesor');

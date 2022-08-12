@@ -19,8 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('idGrupo')->unsigned();
             $table->foreign('idGrupo')->references('id')->on('grupo');
 
-            $table->unsignedBigInteger('idUsuario')->unsigned();
-            $table->foreign('idUsuario')->references('id')->on('users');
+            $table->integer('idUsuario');
             $table->timestamps();
         });
     }

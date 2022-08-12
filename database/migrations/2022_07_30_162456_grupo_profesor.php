@@ -23,8 +23,8 @@ return new class extends Migration
             $table->unsignedBigInteger('idMateria')->unsigned();
             $table->foreign('idMateria')->references('id')->on('materia');
 
-            $table->unsignedBigInteger('idProfesor')->unsigned();
-            $table->foreign('idProfesor')->references('idUsuario')->on('profesor');
+            $table->integer('idProfesor');
+            
             $table->timestamps();
         });
     }
