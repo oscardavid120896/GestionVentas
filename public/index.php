@@ -3,7 +3,7 @@
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
 
-header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Origin: https://coral-app-azql2.ondigitalocean.app');
 header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, X-CSRF-TOKEN, Content-Type, Accept, Access-Control-Request-Method, Authorization");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
 header("Allow: GET, POST, OPTIONS, PUT, DELETE");
