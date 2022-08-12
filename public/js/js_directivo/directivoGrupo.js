@@ -86,7 +86,7 @@ function nuevoG(){
                 headers: {
                   'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                   },
-                url: '/nuevoG/',
+                url: '/https://coral-app-azql2.ondigitalocean.app/nuevoG/',
                 method: 'post',
                 data:{
                     nombre: nombre,
