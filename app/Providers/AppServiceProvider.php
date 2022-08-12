@@ -30,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(Dispatcher $events)
     {
         $this->register();
+        URL::forceScheme('https');
 
         Gate::define('alumno', function ($user) {
             if ($user->rol == 'directivo') {
