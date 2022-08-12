@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Grupo;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 
 class TodosSeeder extends Seeder
 {
@@ -23,6 +24,7 @@ class TodosSeeder extends Seeder
             'email' => 'oscardavid120896@gmail.com',
             'password' => Hash::make('password'),
             'rol' => 'directivo',
+            'email_verified_at' => Carbon::createFromDate(2000,01,01)->toDateTimeString()
         ]);
 
         $ventas = User::create([
