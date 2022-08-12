@@ -4,16 +4,6 @@ use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
 
 define('LARAVEL_START', microtime(true));
-header('Access-Control-Allow-Origin: *');
-header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
-header("Allow: GET, POST, OPTIONS, PUT, DELETE");
-headers('X-CSRF-TOKEN: $("meta[name="csrf-token"]").attr("content")');
-$method = $_SERVER['REQUEST_METHOD'];
-if($method == "OPTIONS") {
-    die();
-}
-
 /*
 |--------------------------------------------------------------------------
 | Check If The Application Is Under Maintenance
