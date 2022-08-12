@@ -53,9 +53,7 @@ Route::get('/profesor', [App\Http\Controllers\ProfesorController::class, 'indexP
 
 Route::group([
     'middleware' => ['api','cors'],
-    'namespace' => $this->namespace,
-    'prefix' => 'api',
-], function($router){
+], function(){
     Route::post('/revisar', [App\Http\Controllers\ProfesorController::class, 'revisar']);
     Route::post('/cali', [App\Http\Controllers\ProfesorController::class, 'cali']);
     Route::post('/misCal', [App\Http\Controllers\AlumnoController::class, 'misCal']);
