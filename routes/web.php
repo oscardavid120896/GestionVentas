@@ -51,30 +51,24 @@ Route::get('/alumno', [App\Http\Controllers\AlumnoController::class, 'indexA'])-
 //Rutas de Profesor
 Route::get('/profesor', [App\Http\Controllers\ProfesorController::class, 'indexP'])->name('profesor');
 
-Route::group([
-    'middleware' => ['api','cors'],
-], function(){
-    Route::post('/revisar', [App\Http\Controllers\ProfesorController::class, 'revisar']);
-    Route::post('/cali', [App\Http\Controllers\ProfesorController::class, 'cali']);
-    Route::post('/misCal', [App\Http\Controllers\AlumnoController::class, 'misCal']);
-    Route::post('/selectMateria', [App\Http\Controllers\DirectivoController:: class, 'selectMateria']);
-    Route::post('/asignarMa', [App\Http\Controllers\DirectivoController:: class, 'asignarMa']);
-    Route::post('/editarM', [App\Http\Controllers\DirectivoController:: class, 'editarMateria']);
-    Route::post('/editarA', [App\Http\Controllers\DirectivoController:: class, 'editarAlumno']);
-    Route::post('/eliminarM', [App\Http\Controllers\DirectivoController:: class, 'eliminarMat']);
-    Route::post('/eliminarA', [App\Http\Controllers\DirectivoController:: class, 'eliminarA']);
-    Route::post('/eliminarG', [App\Http\Controllers\DirectivoController:: class, 'eliminarG']);
-    Route::post('/eliminarAsigna', [App\Http\Controllers\DirectivoController:: class, 'eliminarAsigna']);
-    Route::post('/nuevoM', [App\Http\Controllers\DirectivoController:: class, 'agregarMateria']);
-    Route::post('/nuevoA', [App\Http\Controllers\DirectivoController:: class, 'agregarAlumno']);
-    Route::post('/nuevoP', [App\Http\Controllers\DirectivoController:: class, 'nuevoProfesor']);
-    Route::post('/nuevoG', [App\Http\Controllers\DirectivoController:: class, 'nuevoGrupo']);
-    Route::post('/editarP', [App\Http\Controllers\DirectivoController:: class, 'editarProfesor']);
-    Route::post('/editarC', [App\Http\Controllers\DirectivoController:: class, 'editarProfesorC']);
-    Route::post('/editarG', [App\Http\Controllers\DirectivoController:: class, 'editarGrupo']);
-    Route::post('/eliminarC', [App\Http\Controllers\DirectivoController:: class, 'eliminarProfesor']);
-    Route::post('/nuevoP', [App\Http\Controllers\DirectivoController:: class, 'agregarProfesor']);
-
-});
-
+Route::post('/revisar', [App\Http\Controllers\ProfesorController::class, 'revisar']);
+Route::post('/cali', [App\Http\Controllers\ProfesorController::class, 'cali']);
+Route::post('/misCal', [App\Http\Controllers\AlumnoController::class, 'misCal']);
+Route::post('/selectMateria', [App\Http\Controllers\DirectivoController:: class, 'selectMateria']);
+Route::post('/asignarMa', [App\Http\Controllers\DirectivoController:: class, 'asignarMa']);
+Route::post('/editarM', [App\Http\Controllers\DirectivoController:: class, 'editarMateria']);
+Route::post('/editarA', [App\Http\Controllers\DirectivoController:: class, 'editarAlumno']);
+Route::post('/eliminarM', [App\Http\Controllers\DirectivoController:: class, 'eliminarMat']);
+Route::post('/eliminarA', [App\Http\Controllers\DirectivoController:: class, 'eliminarA']);
+Route::post('/eliminarG', [App\Http\Controllers\DirectivoController:: class, 'eliminarG']);
+Route::post('/eliminarAsigna', [App\Http\Controllers\DirectivoController:: class, 'eliminarAsigna']);
+Route::post('/nuevoM', [App\Http\Controllers\DirectivoController:: class, 'agregarMateria']);
+Route::post('/nuevoA', [App\Http\Controllers\DirectivoController:: class, 'agregarAlumno']);
+Route::post('/nuevoP', [App\Http\Controllers\DirectivoController:: class, 'nuevoProfesor']);
+Route::post('/nuevoG', [App\Http\Controllers\DirectivoController:: class, 'nuevoGrupo']);
+Route::post('/editarP', [App\Http\Controllers\DirectivoController:: class, 'editarProfesor']);
+Route::post('/editarC', [App\Http\Controllers\DirectivoController:: class, 'editarProfesorC']);
+Route::post('/editarG', [App\Http\Controllers\DirectivoController:: class, 'editarGrupo']);
+Route::post('/eliminarC', [App\Http\Controllers\DirectivoController:: class, 'eliminarProfesor']);
+Route::post('/nuevoP', [App\Http\Controllers\DirectivoController:: class, 'agregarProfesor']);
 
